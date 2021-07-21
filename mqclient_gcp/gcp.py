@@ -6,9 +6,8 @@ from typing import Generator, List, Optional, Tuple
 
 from google.api_core import exceptions, retry  # type: ignore[import]
 from google.cloud import pubsub  # type: ignore[import]
-
-from .. import backend_interface
-from ..backend_interface import (
+from mqclient import backend_interface, log_msgs
+from mqclient.backend_interface import (
     RETRY_DELAY,
     TIMEOUT_MILLIS_DEFAULT,
     TRY_ATTEMPTS,
@@ -18,7 +17,6 @@ from ..backend_interface import (
     RawQueue,
     Sub,
 )
-from . import log_msgs
 
 _DEFAULT_RETRY = retry.Retry(
     initial=RETRY_DELAY,
