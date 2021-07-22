@@ -23,7 +23,7 @@ jobs:
                 tox --notest -vv
                 . .tox/py/bin/activate
                 ./resources/gcp-install.sh
-                cd ./examples/gcp
+                cd ./examples
                 ./run-using-emulator.sh
 
     pycycle:
