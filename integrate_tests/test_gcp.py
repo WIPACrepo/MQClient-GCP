@@ -1,7 +1,7 @@
 """Run integration tests for GCP backend."""
 
 # local imports
-from mqclient.testing_frameworks import integration_tests as it
+import mqclient.testing_frameworks.integration_tests as it
 from mqclient.testing_frameworks.integration_tests.utils import (  # pytest.fixture # noqa: F401 # pylint: disable=W0611
     queue_name,
 )
