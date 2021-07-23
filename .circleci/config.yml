@@ -23,8 +23,13 @@ jobs:
                 tox --notest -vv
                 . .tox/py/bin/activate
                 ./resources/gcp-install.sh
-                cd ./examples
+                echo "First, Google's Examples:"
+                cd ./examples/googles_examples
                 ./run-using-emulator.sh
+                echo "Now, Our Examples:"
+                cd ../..
+                ./examples/run.sh
+
 
     pycycle:
         docker:
