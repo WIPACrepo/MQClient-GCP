@@ -29,6 +29,7 @@ jobs:
                 ./run-using-emulator.sh
                 echo "Now, Our Examples:"
                 cd ../..
+                gcloud beta emulators pubsub start --project="i3-gcp-proj" &
                 ./examples/run.sh
 
 
