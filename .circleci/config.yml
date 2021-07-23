@@ -24,7 +24,6 @@ jobs:
                 . .tox/py/bin/activate
                 ./resources/gcp-install.sh
                 echo "First, Google's Examples:"
-                ./examples/run.sh
                 cd ./examples/googles_examples
                 ./run-using-emulator.sh
                 echo "Now, Our Examples:"
