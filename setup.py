@@ -19,8 +19,13 @@ shop = SetupShop(
     "Message Queue Client API with Google Cloud Platform (GCP)",
 )
 
+# FIXME - remove this hacky code
+kwargs = shop.get_kwargs()
+kwargs["install_requires"].append(
+    "mqclient @ git+https://github.com/WIPACrepo/MQClient@bug-fix-telemetry"
+)
 setup(
     url="https://github.com/WIPACrepo/MQClient-GCP",
     package_data={shop.name: ["py.typed", "requirements.txt"]},
-    **shop.get_kwargs(),
+    **kwargs,
 )
