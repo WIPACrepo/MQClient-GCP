@@ -39,8 +39,10 @@ class GCP(RawQueue):
         self._project_id = project_id
 
         # create a temporary PublisherClient just to get `topic_path`
-        self._topic_path = pubsub.PublisherClient().topic_path(  # pylint: disable=no-member
-            self._project_id, topic_id
+        self._topic_path = (
+            pubsub.PublisherClient().topic_path(  # pylint: disable=no-member
+                self._project_id, topic_id
+            )
         )
         logging.debug(f"Topic Path: {self._topic_path}")
 
@@ -203,7 +205,7 @@ class GCPSub(GCP, Sub):
 
     @staticmethod
     def _to_message(  # type: ignore[override]  # noqa: F821 # pylint: disable=W0221
-        msg: pubsub.types.ReceivedMessage  # pylint: disable=no-member
+        msg: pubsub.types.ReceivedMessage,  # pylint: disable=no-member
     ) -> Optional[Message]:
         """Transform GCP-Message to Message type."""
         return Message(msg.ack_id, msg.message.data)
@@ -378,8 +380,11 @@ class Backend(backend_interface.Backend):
             return address
 
     @staticmethod
-    def create_pub_queue(address: str, name: str) -> GCPPub:
-        """Create a publishing queue."""
+    def create_pub_queue(address: str, name: str, auth_token: str = "") -> GCPPub:
+        """Create a publishing queue.
+
+        # NOTE - `auth_token` is not used currently
+        """
         q = GCPPub(  # pylint: disable=invalid-name
             Backend._figure_host_address(address),
             Backend.PROJECT_ID,
@@ -390,8 +395,13 @@ class Backend(backend_interface.Backend):
         return q
 
     @staticmethod
-    def create_sub_queue(address: str, name: str, prefetch: int = 1) -> GCPSub:
-        """Create a subscription queue."""
+    def create_sub_queue(
+        address: str, name: str, prefetch: int = 1, auth_token: str = ""
+    ) -> GCPSub:
+        """Create a subscription queue.
+
+        # NOTE - `auth_token` is not used currently
+        """
         q = GCPSub(  # pylint: disable=invalid-name
             Backend._figure_host_address(address),
             Backend.PROJECT_ID,
