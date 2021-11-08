@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ `basename "$PWD"` != "MQClient-GCP" ]] ; then
-	echo "ERROR: Run from 'MQClient-GCP/'"
+	echo "ERROR: Run from 'MQClient-GCP/' (not '$PWD')"
 	exit 1
 fi
 
