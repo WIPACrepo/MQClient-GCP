@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ `basename "$PWD"` != "MQClient-GCP" && basename != "/home/circleci/project" ]] ; then
+if [[ `basename "$PWD"` != "MQClient-GCP" && $PWD != "/home/circleci/project" ]] ; then
 	echo "ERROR: Run from 'MQClient-GCP/' (not '$PWD')"
 	exit 1
 fi
