@@ -2,7 +2,7 @@
 
 import logging
 import os
-from typing import Generator, List, Optional, Tuple
+from typing import AsyncGenerator, Generator, List, Optional, Tuple
 
 from google.api_core import exceptions, retry  # type: ignore[import]
 from google.cloud import pubsub  # type: ignore[import]
@@ -46,13 +46,13 @@ class GCP(RawQueue):
         )
         logging.debug(f"Topic Path: {self._topic_path}")
 
-    def connect(self) -> None:
+    async def connect(self) -> None:
         """Set up connection and channel."""
-        super().connect()
+        await super().connect()
 
-    def close(self) -> None:
+    async def close(self) -> None:
         """Close connection."""
-        super().close()
+        await super().close()
 
     @staticmethod
     def _create_and_connect_sub(
@@ -106,10 +106,10 @@ class GCPPub(GCP, Pub):
         self.pub: Optional[pubsub.PublisherClient] = None
         self.subscription_ids = subscription_ids if subscription_ids else []
 
-    def connect(self) -> None:
+    async def connect(self) -> None:
         """Set up pub, then create topic and any subscriptions indicated."""
         logging.debug(log_msgs.CONNECTING_PUB)
-        super().connect()
+        await super().connect()
 
         self.pub = pubsub.PublisherClient(
             publisher_options=pubsub.types.PublisherOptions(
@@ -137,15 +137,15 @@ class GCPPub(GCP, Pub):
                 self.endpoint, self._project_id, self._topic_path, sub_id
             )
 
-    def close(self) -> None:
+    async def close(self) -> None:
         """Close pub (no-op)."""
         logging.debug(log_msgs.CLOSING_PUB)
-        super().close()
+        await super().close()
         if not self.pub:
             raise ClosingFailedExcpetion("No pub to sub.")
         logging.debug(log_msgs.CLOSED_PUB)
 
-    def send_message(self, msg: bytes) -> None:
+    async def send_message(self, msg: bytes) -> None:
         """Send a message (publish)."""
         logging.debug(log_msgs.SENDING_MESSAGE)
         if not self.pub:
@@ -178,23 +178,23 @@ class GCPSub(GCP, Sub):
         self._subscription_path: Optional[str] = None
         self._subscription_id = subscription_id
 
-    def connect(self) -> None:
+    async def connect(self) -> None:
         """Set up sub (subscriber) and create subscription if necessary.
 
         NOTE: Based on `examples/gcp/subscriber.create_subscription()`
         """
         logging.debug(log_msgs.CONNECTING_SUB)
-        super().connect()
+        await super().connect()
 
         self.sub, self._subscription_path = GCP._create_and_connect_sub(
             self.endpoint, self._project_id, self._topic_path, self._subscription_id
         )
         logging.debug(log_msgs.CONNECTED_SUB)
 
-    def close(self) -> None:
+    async def close(self) -> None:
         """Close sub."""
         logging.debug(log_msgs.CLOSING_SUB)
-        super().close()
+        await super().close()
         if not self.sub:
             raise ClosingFailedExcpetion("No consumer to sub.")
         try:
@@ -240,7 +240,7 @@ class GCPSub(GCP, Sub):
                 msgs.append(msg)
         return msgs
 
-    def get_message(
+    async def get_message(
         self, timeout_millis: Optional[int] = TIMEOUT_MILLIS_DEFAULT
     ) -> Optional[Message]:
         """Get a message.
@@ -268,7 +268,7 @@ class GCPSub(GCP, Sub):
             for msg in msgs:
                 yield msg
 
-    def ack_message(self, msg: Message) -> None:
+    async def ack_message(self, msg: Message) -> None:
         """Ack a message from the queue."""
         logging.debug(log_msgs.ACKING_MESSAGE)
         if not self.sub:
@@ -280,7 +280,7 @@ class GCPSub(GCP, Sub):
         )
         logging.debug(f"{log_msgs.ACKED_MESSAGE} ({msg.msg_id!r}).")
 
-    def reject_message(self, msg: Message) -> None:
+    async def reject_message(self, msg: Message) -> None:
         """Reject (nack) a message from the queue."""
         logging.debug(log_msgs.NACKING_MESSAGE)
         if not self.sub:
@@ -296,9 +296,9 @@ class GCPSub(GCP, Sub):
         )
         logging.debug(f"{log_msgs.NACKED_MESSAGE} ({msg.msg_id!r}).")
 
-    def message_generator(
+    async def message_generator(  # type: ignore[override] # there's a mypy bug here
         self, timeout: int = 60, propagate_error: bool = True
-    ) -> Generator[Optional[Message], None, None]:
+    ) -> AsyncGenerator[Optional[Message], None]:
         """Yield Messages.
 
         Generate messages with variable timeout.
@@ -380,7 +380,7 @@ class Backend(backend_interface.Backend):
             return address
 
     @staticmethod
-    def create_pub_queue(address: str, name: str, auth_token: str = "") -> GCPPub:
+    async def create_pub_queue(address: str, name: str, auth_token: str = "") -> GCPPub:
         """Create a publishing queue.
 
         # NOTE - `auth_token` is not used currently
@@ -391,11 +391,11 @@ class Backend(backend_interface.Backend):
             name,
             [f"{Backend.SUBSCRIPTION_ID}-{name}"],
         )
-        q.connect()
+        await q.connect()
         return q
 
     @staticmethod
-    def create_sub_queue(
+    async def create_sub_queue(
         address: str, name: str, prefetch: int = 1, auth_token: str = ""
     ) -> GCPSub:
         """Create a subscription queue.
@@ -409,5 +409,5 @@ class Backend(backend_interface.Backend):
             f"{Backend.SUBSCRIPTION_ID}-{name}",
         )
         q.prefetch = prefetch
-        q.connect()
+        await q.connect()
         return q
