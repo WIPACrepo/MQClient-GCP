@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# noqa
+# type: ignore
 
 # Copyright 2016 Google Inc. All Rights Reserved.
 #
