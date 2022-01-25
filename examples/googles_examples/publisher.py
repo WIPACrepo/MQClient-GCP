@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# flake8: noqa
+# type: ignore
 
 # Copyright 2016 Google LLC. All Rights Reserved.
 #
