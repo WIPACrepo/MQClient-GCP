@@ -19,6 +19,10 @@ shop = SetupShop(
     "Message Queue Client API with Google Cloud Platform (GCP)",
 )
 
+subprocess.run(
+    "pip install git+https://github.com/WIPACrepo/MQClient@async-tests-fix".split(),
+    check=True,
+)
 setup(
     url="https://github.com/WIPACrepo/MQClient-GCP",
     package_data={shop.name: ["py.typed", "requirements.txt"]},
