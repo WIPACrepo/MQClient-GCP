@@ -23,12 +23,20 @@ jobs:
                 tox --notest -vv
                 . .tox/py/bin/activate
                 ./resources/gcp-install.sh
-                echo "First, Google's Examples:"
+                ./examples/run.sh
+
+    google-examples:
+        docker:
+            - image: circleci/python:3.8
+        steps:
+            - checkout
+            - run: |
+                pip install --user tox
+                tox --notest -vv
+                . .tox/py/bin/activate
+                ./resources/gcp-install.sh
                 cd ./examples/googles_examples
                 ./run-using-emulator.sh
-                echo "Now, Our Examples:"
-                cd ../..
-                ./examples/run.sh
 
 
     pycycle:
@@ -49,4 +57,5 @@ workflows:
         jobs:
             - integrate
             - examples
+            - google-examples
             - pycycle
