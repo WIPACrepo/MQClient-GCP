@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.2.0 (2022-02-02)
+### Feature
+* Upgrade to MQClient's Breaking Changes ([#11](https://github.com/WIPACrepo/MQClient-GCP/issues/11)) ([`2328d6a`](https://github.com/WIPACrepo/MQClient-GCP/commit/2328d6a8aae96b7038735cd358a0b21e8f6d0d31))
+
 ## v0.1.1 (2022-01-25)
 
 
