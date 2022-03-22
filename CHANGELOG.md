@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.0 (2022-03-22)
+### Feature
+* Updates for PyPI Publish ([#12](https://github.com/WIPACrepo/MQClient-GCP/issues/12)) ([`5f44764`](https://github.com/WIPACrepo/MQClient-GCP/commit/5f447642e9ebfda5d86923684046ba6c1d58889b))
+
 ## v0.2.0 (2022-02-02)
 ### Feature
 * Upgrade to MQClient's Breaking Changes ([#11](https://github.com/WIPACrepo/MQClient-GCP/issues/11)) ([`2328d6a`](https://github.com/WIPACrepo/MQClient-GCP/commit/2328d6a8aae96b7038735cd358a0b21e8f6d0d31))
