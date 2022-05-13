@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.0 (2022-05-13)
+### Feature
+* Package-Specific Logger `"mqclient-gcp"` ([#13](https://github.com/WIPACrepo/MQClient-GCP/issues/13)) ([`8437eda`](https://github.com/WIPACrepo/MQClient-GCP/commit/8437eda8bdaf01f7dea84c7518dca1597d5fdb4c))
+
 ## v0.3.0 (2022-03-22)
 ### Feature
 * Updates for PyPI Publish ([#12](https://github.com/WIPACrepo/MQClient-GCP/issues/12)) ([`5f44764`](https://github.com/WIPACrepo/MQClient-GCP/commit/5f447642e9ebfda5d86923684046ba6c1d58889b))
